@@ -26,5 +26,3 @@ def get_latest_model_dir() -> str:
     path = os.path.join(MODEL_SAVE_PATH, os.listdir(MODEL_SAVE_PATH)[-1])
     logger.info(f"Latest model directory: {path}")
     return path
-
-get_data_from_gbucket()

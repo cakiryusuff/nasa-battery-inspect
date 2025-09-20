@@ -20,7 +20,7 @@ def on_message(client, userdata, msg):
             break
         except requests.exceptions.ConnectionError:
             print("Backend hazır değil, tekrar deniyor...")
-            time.sleep(2)
+            time.sleep(3)
 
 client = mqtt.Client()
 client.on_message = on_message

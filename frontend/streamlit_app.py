@@ -1,7 +1,6 @@
 import streamlit as st
 import requests
 
-# API endpoint
 url = "http://backend:5000/return_prediction" 
 
 st.title("API Data Sender")
@@ -14,7 +13,6 @@ with st.form("my_form"):
     
     submitted = st.form_submit_button("Submit")
 
-# Form gönderildiğinde POST isteği
 if submitted:
     payload = {
         "Voltage_charge": voltage_charge,

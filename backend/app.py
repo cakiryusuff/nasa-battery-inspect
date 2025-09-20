@@ -22,9 +22,7 @@ try:
     db_manager.connect()
 except Exception as e:
     use_db = False
-    print(f"Database connection error: {e}")
-    logger.error(f"Database connection error: {e}")
-
+    logger.info(f"Database connection failed, database is not using: {e}")
 
 @app.route("/return_prediction", methods=["POST", "GET"])
 def index():

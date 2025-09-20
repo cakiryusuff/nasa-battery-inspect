@@ -1,7 +1,6 @@
 import json
 import time
 import paho.mqtt.client as mqtt
-# from config.paths_config import *
 import pandas as pd
 import os
 import logging
@@ -14,7 +13,6 @@ TOPIC = "battery/data"
 client = mqtt.Client()
 client.connect(BROKER, 1883, 60)
 
-print(os.listdir("."))
 df = pd.read_csv("test_data.csv")
 
 for _, row in df.iterrows():

@@ -2,4 +2,3 @@ venv/*
 venv
 yed_interview.egg-info
 yed_interview.egg-info/*
-artifacts

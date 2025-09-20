@@ -3,6 +3,4 @@ venv
 key.json
 __pycache__/*
 __pycache__
-artifacts/*
-artifacts
 logs/*
