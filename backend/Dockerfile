@@ -4,6 +4,11 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 ENV GOOGLE_APPLICATION_CREDENTIALS=/app/key.json
 
+ENV DB_NAME=mydatabase
+ENV DB_USER=myuser
+ENV DB_PASSWORD=mypassword
+ENV DB_HOST=myhost
+
 RUN apt-get update && apt-get install -y python3.9 python3.9-dev python3-pip
 
 WORKDIR /app

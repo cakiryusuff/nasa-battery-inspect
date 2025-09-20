@@ -10,6 +10,7 @@ class DBManager:
         self.db_password = db_password
         self.db_host = db_host
         self.connection = None
+        self.connect()
         
     def connect(self):
         self.connection = psycopg2.connect(
@@ -29,7 +30,7 @@ class DBManager:
             current_measured FLOAT,
             temperature_measured FLOAT,
             voltage_charge FLOAT,
-            time TIMESTAMP,
+            time FLOAT,
             power FLOAT,
             soc FLOAT,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP

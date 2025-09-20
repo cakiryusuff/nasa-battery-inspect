@@ -7,8 +7,6 @@ services:
       - "5000:5000"
     networks:
       - api-network
-    volumes:
-      - ./shared_data:/app/data
 
   mqtt:
     image: eclipse-mosquitto:2
@@ -41,8 +39,6 @@ services:
       - mqtt
     networks:
       - api-network
-    volumes:
-      - ./shared_data:/app/data
 
   subscriber:
     build:

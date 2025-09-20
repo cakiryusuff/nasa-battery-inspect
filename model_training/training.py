@@ -15,12 +15,16 @@ class Training:
         logger.info("-"*50)
         logger.info("Training started")
         self.model = None
-        self.data_path = DATA_PATH
+        self.train_data_path = TRAIN_DATA_PATH
         self.model_path = MODEL_SAVE_PATH
         self.test_data_path = TEST_DATA_PATH
-        get_data_from_gbucket()
         
-    def mat_to_dataframe(self, data_path: str, battery_key: str = "B0006") -> pd.DataFrame:
+    def mat_to_dataframe(self, data_path: str) -> pd.DataFrame:
+        dirs = os.listdir(data_path)
+        for dir in dirs:
+            if dir.endswith(".mat"):
+                battery_key = dir.split(".")[0]
+        battery_key = dirs[0].split(".")[0]
         logger.info(f"- Converting {battery_key}.mat to dataframe...")
         mat = loadmat(data_path + f"/{battery_key}.mat", squeeze_me=True, struct_as_record=False)
         block = mat[battery_key]
@@ -116,9 +120,15 @@ class Training:
         logger.info("- - Feature engineering completed")
         return df
     
-    def prepare_data(self, data_path: str, battery_key: str = "B0006") -> pd.DataFrame:
+    def prepare_data(self, data_path: str, target: str = "train") -> pd.DataFrame:
         logger.info("- Preparing data...")
-        df = self.mat_to_dataframe(data_path, battery_key=battery_key)
+        try:
+            get_data_from_gbucket(target=target)
+        except Exception as e:
+            logger.error("- - Error getting data from GBucket: " + str(e))
+            logger.info("- - Data not found in GBucket. Using local data")
+
+        df = self.mat_to_dataframe(data_path)
         df = self.datetime_to_timestamp(df)
         df = self.calc_soc(df)
         df = self.equalize_data(df)
@@ -155,15 +165,19 @@ class Training:
         logger.info("- Test data saved. Test data path: " + model_path + "/test_data.csv")
     
     def run(self):
-        logger.info("Running training...")
-        train_df = self.prepare_data(self.data_path)
-        test_df = self.prepare_data(self.data_path, battery_key="B0007")
-        self.train(train_df)
-        self.evaluate(test_df)
-        self.save_model(self.model_path)
-        self.save_test_data(test_df, self.test_data_path)
-        logger.info("Training completed")
-        logger.info("-"*50)
+        try:
+            logger.info("Running training...")
+            train_df = self.prepare_data(self.train_data_path)
+            test_df = self.prepare_data(self.test_data_path, target="test")
+            self.train(train_df)
+            self.evaluate(test_df)
+            self.save_model(self.model_path)
+            self.save_test_data(test_df, self.test_data_path)
+            logger.info("Training completed")
+            logger.info("-"*50)
+        except Exception as e:
+            logger.error("Error running training: " + str(e))
+            logger.info("-"*50)
                 
 if __name__ == "__main__":
     training = Training()
