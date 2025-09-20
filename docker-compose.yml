@@ -1,0 +1,59 @@
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    ports:
+      - "5000:5000"
+    networks:
+      - api-network
+    volumes:
+      - ./shared_data:/app/data
+
+  mqtt:
+    image: eclipse-mosquitto:2
+    container_name: mqtt-broker
+    ports:
+      - "1883:1883"
+    volumes:
+      - ./mosquitto.conf:/mosquitto/config/mosquitto.conf:ro
+    networks:
+      - api-network
+
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    ports:
+      - "8501:8501"
+    environment:
+      - BACKEND_URL=http://backend:5000
+    depends_on:
+      - backend
+    networks:
+      - api-network
+
+  publisher:
+    build:
+      context: ./mqtt_publisher
+      dockerfile: Dockerfile
+    depends_on:
+      - mqtt
+    networks:
+      - api-network
+    volumes:
+      - ./shared_data:/app/data
+
+  subscriber:
+    build:
+      context: ./mqtt_subscriber
+      dockerfile: Dockerfile
+    depends_on:
+      - mqtt
+      - backend
+    networks:
+      - api-network
+
+networks:
+  api-network:
+    name: api-network

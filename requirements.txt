@@ -1,0 +1,12 @@
+pandas
+matplotlib
+scipy
+scikit-learn
+seaborn
+statsmodels
+flask
+streamlit
+ydf
+google-cloud-storage
+paho-mqtt
+psycopg2-binary
