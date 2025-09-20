@@ -2,7 +2,9 @@ FROM ubuntu:20.04
 
 ENV DEBIAN_FRONTEND=noninteractive 
 
-ENV GOOGLE_APPLICATION_CREDENTIALS=/app/key.json
+# if u want to use Google Cloud Bucket on your local container,
+# then uncomment this and make sure the service account key name is key.json
+# ENV GOOGLE_APPLICATION_CREDENTIALS=/app/key.json
 
 ENV DB_NAME=mydatabase
 ENV DB_USER=myuser
